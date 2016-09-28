@@ -23,7 +23,7 @@ There are two utilities for looking up words:
 * Word lists: English word lists taken from [this repo](https://github.com/dwyl/english-words)
 
 Usage of these libraries are available as features with the
-`dictionary-features` function found [here](https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.html#var-dictionary-features).
+`dictionary-features` function found [here](https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.word.html#var-dictionary-features).
 
 All other [word lists](ftp://ftp.gnu.org/gnu/aspell/dict/0index.html) come from
 the [GNU Aspell](http://aspell.net) dictionaries.
