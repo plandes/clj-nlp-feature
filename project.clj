@@ -4,7 +4,7 @@
   :license {:name "Apache License version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0"
             :distribution :repo}
-  :plugins [[lein-codox "0.9.5"]
+  :plugins [[lein-codox "0.10.0"]
             [org.clojars.cvillecsteele/lein-git-version "1.0.3"]]
   :codox {:metadata {:doc/format :markdown}
           :project {:name "NLP Feature Creation"}
@@ -13,11 +13,7 @@
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
-  :exclusions [org.slf4j/slf4j-log4j12
-               ch.qos.logback/logback-classic]
-  :dependencies [[org.clojure/clojure "1.8.0"]
-
-                 ;; logging
+  :dependencies [;; logging
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
@@ -37,6 +33,7 @@
                  [net.sf.extjwnl/extjwnl "1.9"]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
   :profiles {:uberjar {:aot :all}
+             :provided {:dependencies [[org.clojure/clojure "1.8.0"]]}
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
