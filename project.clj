@@ -18,10 +18,6 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
 
                  ;; logging
-                 [org.apache.logging.log4j/log4j-core "2.3"]
-                 [org.apache.logging.log4j/log4j-api "2.3"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.3"]
-                 [org.apache.logging.log4j/log4j-jcl "2.3"]
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
