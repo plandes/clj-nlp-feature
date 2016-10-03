@@ -47,3 +47,19 @@
   (/ (->> items (map true-fn)
           (filter true?) count)
      (count items)))
+
+(defmacro combine-features
+  "Combine features from the forms for which features don't already exist in
+  **features**, which is a map with functions as keys and features already
+  created with that function as the value of the respective function."
+  [features & forms]
+  `(->> (merge ~@(->> (map (fn [form]
+                             (let [fn-key (->> form first
+                                               (ns-resolve (ns-name *ns*))
+                                               var-get)]
+                               (when-not (get features (first form))
+                                 form)))
+                           forms)
+                      doall))
+        (concat (or (vals ~features) [nil]))
+        (apply merge)))
