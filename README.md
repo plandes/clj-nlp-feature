@@ -28,6 +28,17 @@ Usage of these libraries are available as features with the
 All other [word lists](ftp://ftp.gnu.org/gnu/aspell/dict/0index.html) come from
 the [GNU Aspell](http://aspell.net) dictionaries.
 
+Building
+--------
+All [leiningen](http://leiningen.org) tasks will work in this project.  For
+additional build functionality (git tag convenience utility functionality)
+clone the [Clojure build repo](https://github.com/plandes/clj-zenbuild) in the
+same (parent of this file) directory as this project:
+```bash
+   cd ..
+   git clone https://github.com/plandes/clj-zenbuild
+```
+
 License
 --------
 Copyright © 2016 Paul Landes
