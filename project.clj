@@ -13,7 +13,9 @@
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
-  :dependencies [;; logging
+  :dependencies [[[org.clojure/clojure "1.8.0"]]
+
+                 ;; logging
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
@@ -32,9 +34,7 @@
                  ;; wordnet
                  [net.sf.extjwnl/extjwnl "1.9"]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
-  :profiles {:uberjar {:aot :all}
-             :provided {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :dev
+  :profiles {:dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
               :dependencies [[com.zensols/clj-append "1.0.4"]]}})
