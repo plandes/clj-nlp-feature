@@ -13,7 +13,7 @@
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
-  :dependencies [[[org.clojure/clojure "1.8.0"]]
+  :dependencies [[org.clojure/clojure "1.8.0"]
 
                  ;; logging
                  [org.clojure/tools.logging "0.3.1"]
@@ -30,7 +30,7 @@
                  ;; feature stats
                  [net.mikera/core.matrix.stats "0.7.0"]
 
-                 ;;; NLP
+                 ;; NLP
                  ;; wordnet
                  [net.sf.extjwnl/extjwnl "1.9"]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
