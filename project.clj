@@ -34,7 +34,8 @@
                  ;; wordnet
                  [net.sf.extjwnl/extjwnl "1.9"]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
-  :profiles {:dev
+  :profiles {:appassem {:aot :all}
+             :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
               :dependencies [[com.zensols/clj-append "1.0.4"]]}})
