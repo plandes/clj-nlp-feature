@@ -19,7 +19,7 @@
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.10"]
+                 [com.zensols.tools/actioncli "0.0.11"]
 
                  ;; language name to locale
                  [com.neovisionaries/nv-i18n "1.11"]
