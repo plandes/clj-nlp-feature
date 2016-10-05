@@ -41,9 +41,27 @@
   ([check val-fn]
    (if check (val-fn check) 0)))
 
+(defn ratio-0-if-empty
+  "Return a ratio or 0 if **b** is 0 to guard against divide by zero."
+  [a b]
+  (if (= 0 b)
+    0
+    (/ a b)))
+
+(defn- ratio-neg-if-empty
+  "Return a ratio or -1 if **b** is 0 to guard against divide by zero."
+  [a b]
+  (if (= 0 b)
+    -1
+    (/ a b)))
+
 (defn ratio-true
-  "Return the ratio of **items** whose evaluation of **true-fn** is `true`."
+  "Return the ratio of **items** whose evaluation of **true-fn** is `true`.
+  If **items** is empty return 0."
   [items true-fn]
-  (/ (->> items (map true-fn)
-          (filter true?) count)
-     (count items)))
+  (let [cnt (count items)]
+    (if (= cnt 0)
+      0
+      (/ (->> items (map true-fn)
+              (filter true?) count)
+         cnt))))

@@ -5,12 +5,8 @@
   (:require [clojure.string :as s]
             [clojure.set :refer (union)])
   (:require [clojure.core.matrix.stats :as stat])
-  (:require [zensols.nlparse.locale :as lc]))
-
-(defn- divide-by-zero-or-neg [a b]
-  (if (= 0 b)
-    -1
-    (/ a b)))
+  (:require [zensols.nlparse.locale :as lc]
+            [zensols.nlparse.feature.util :refer :all]))
 
 ;; (longest) repeating characters
 (defn- lrs-unique-feature-metas [unique-idx]
@@ -128,7 +124,7 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
   (let [char-dist (->> (StringUtils/uniqueCharCounts text) vals)
         len (count text)]
    {:char-dist-unique (count char-dist)
-    :char-dist-unique-ratio (divide-by-zero-or-neg (count char-dist) len)
+    :char-dist-unique-ratio (ratio-neg-if-empty (count char-dist) len)
     :char-dist-count len
     :char-dist-variance (if (= len 0) -1 (->> char-dist stat/variance))
     :char-dist-mean (if (= len 0) -1 (->> char-dist stat/mean))}))
@@ -207,14 +203,15 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
     * **:caps-all** number of all caps tokens (i.e. `YES`)"
   [tokens]
   (let [toks (map :text tokens)
-        [cap capitalized caps] (StringUtils/countCapitals (into-array toks))
+        [cap capitalized caps]
+        (StringUtils/countCapitals (into-array String toks))
         tlen (count toks)]
     {:caps-first-char-count cap
-     :caps-first-char-ratio (/ cap tlen)
+     :caps-first-char-ratio (ratio-0-if-empty cap tlen)
      :caps-capitalized-count capitalized
-     :caps-capitalized-ratio (/ capitalized tlen)
+     :caps-capitalized-ratio (ratio-0-if-empty capitalized tlen)
      :caps-all-count caps
-     :caps-all-ratio (/ caps tlen)
+     :caps-all-ratio (ratio-0-if-empty caps tlen)
      :cap-utterance (->> toks first first
                          (#(and % (Character/isUpperCase %)))
                          (#(if % true false)))}))
