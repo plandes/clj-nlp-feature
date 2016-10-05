@@ -48,7 +48,7 @@
     0
     (/ a b)))
 
-(defn- ratio-neg-if-empty
+(defn ratio-neg-if-empty
   "Return a ratio or -1 if **b** is 0 to guard against divide by zero."
   [a b]
   (if (= 0 b)

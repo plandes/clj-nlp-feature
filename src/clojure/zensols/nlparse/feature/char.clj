@@ -155,9 +155,9 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
                       text)
         len (count text)]
     {:punctuation-count (:punc feats)
-     :punctuation-ratio (divide-by-zero-or-neg (:punc feats) len)
+     :punctuation-ratio (ratio-neg-if-empty (:punc feats) len)
      :latin-non-alpha-numeric-count (:latin-nan feats)
-     :latin-non-alpha-numeric-ratio (divide-by-zero-or-neg (:latin-nan feats) len)}))
+     :latin-non-alpha-numeric-ratio (ratio-neg-if-empty (:latin-nan feats) len)}))
 
 (defn punctuation-metas
   "See [[punctuation-features]]."
