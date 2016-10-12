@@ -177,19 +177,61 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
         (#(conj % (- total (reduce + %))))
         (#(if (<= (count %) 1) 0 (stat/variance %))))))
 
+(defn- unicode-range-feature-keys [index]
+  (let [lkeys (conj (lc/locale-keys) none-label)]
+    [[(keyword (format "unicode-range-name-%d" index)) lkeys]
+     [(keyword (format "unicode-range-ratio-%d" index)) 'numeric]]))
+
+(defn- unicode-range-feature [text nth-best]
+  (->> (lc/unicode-counts text :best-match? true)
+       (sort (fn [a b]
+               (compare (:count b) (:count a))))
+       ((fn [data]
+          (let [{cnt :count
+                 name :name}
+                (if (> (count data) nth-best)
+                  (nth data nth-best)
+                  {:name none-label
+                   :count 0})
+                [[name-key _]
+                 [ratio-key _]]
+                (unicode-range-feature-keys nth-best)]
+            {name-key name
+             ratio-key (ratio-0-if-empty cnt (count text))})))))
+
+(defn- unicode-range-features [text bests]
+  (->> (range bests)
+       (map (fn [nth-best]
+              (unicode-range-feature text nth-best)))
+       (apply merge)))
+
 (defn unicode-features
   "Create features based on the Unicode values of **text**:
 
-  * **:unicode-variance** variance of Unicode (range) character counts"
-  [text]
+  * **:unicode-variance** variance of Unicode (range) character counts
+  * **:unicode-range-name-N** top Nth best (highest count) unicode name
+  * **:unicode-range-ratio-N** top Nth best (highest count) unicode character ratio
+
+  **nth-best-unicodes** are the number of range name/ratio features for Unicode
+  ranges across characters in **text**."
+  [text nth-best-unicodes]
   (let [text (s/replace text #"\s+" "")
         ucounts (lc/unicode-counts text :best-match? true)]
-    {:unicode-variance (unicode-variance text ucounts)}))
+    (merge (unicode-range-features text nth-best-unicodes)
+           {:unicode-variance (unicode-variance text ucounts)})))
+
+(defn- unicode-range-feature-metas
+  "See [[unicode-features]]."
+  [nth-best-unicodes]
+  (->> (range nth-best-unicodes)
+       (map unicode-range-feature-keys)
+       (apply concat)))
 
 (defn unicode-feature-metas
   "See [[unicode-features]]."
-  []
-  [[:unicode-variance 'numeric]])
+  [nth-best-unicodes]
+  (concat (unicode-range-feature-metas nth-best-unicodes)
+          [[:unicode-variance 'numeric]]))
 
 
 

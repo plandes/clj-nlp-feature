@@ -13,7 +13,59 @@
 (def ^:private unicodes-inst (atom nil))
 (def ^:private unicode-to-locale-inst (atom nil))
 (def ^:private unicode-to-locale-vals-inst (atom nil))
+(def ^:private locale-keys-inst (atom nil))
 (defa- name-to-locale-fn-inst)
+
+(def ^:private pl-alph
+  #{65 97 260 261 66 98 67 99 262 263 68 100 69 101 280 281 70
+    102 71 103 72 104 73 105 74 106 75 107 76 108 321 322 77
+    109 78 110 323 324 79 111 211 243 80 112 82 114 83 115 346
+    347 84 116 85 117 87 119 89 121 90 122 377 378 379 380})
+
+(def ^:private pl-diff
+  #{260 262 280 321 323 211 346 379 261 263 281 322 324
+    243 347 378 380})
+
+(def ^:private es-diff
+  #{191 161 241 209})
+
+(def ^:private de-diff
+  #{223})
+
+(def ^:private tr-diff
+  #{287 286 305 304 246 214 252 220 351 350 231 199})
+
+(def ^:private ru-alph
+  (set (range 0x410 0x450)))
+
+(def ^:private uk-alph
+  #{1040 1072 1041 1073 1042 1074 1043 1075 1168 1169 1044
+    1076 1045 1077 1028 1108 1046 1078 1047 1079 1048 1080
+    1030 1110 1031 1111 1049 1081 1050 1082 1051 1083 1084
+    1053 1085 1054 1086 1055 1087 1056 1088 1057 1089 1058
+    1090 1059 1091 1060 1092 1061 1093 1062 1094 1063 1095
+    1064 1096 1065 1097 1068 1100 1070 1102 1071 1103})
+
+(def ^:private uk-diff
+  (difference ru-alph uk-alph))
+
+(def ^:private sl-diff
+  #{268 269 352 353 381 382})
+
+(def ^:private ro-diff
+  #{258 259 194 226 206 238 536 537 538 539})
+
+(def ^:private umlauts
+  #{196 228 214 246 220 252})
+
+(def ^:private forward-accent-vowels
+  #{225 233 237 243 250 193 201 205 211 218})
+
+(def ^:private backward-accent-vowels
+  #{224 232 236 242 249 192 200 204 210 217})
+
+(def ^:private hat-accent-vowels
+  #{226 234 238 244 251 194 202 206 212 219})
 
 (defn set-name-to-locale-fn
   "Set the function to use when mapping a language name to a
@@ -102,75 +154,91 @@
          (apply merge)
          doall)))
 
+(defn- loc-to-name [loc]
+  (format "lang-%s" (locale-to-lang-code loc)))
+
+(defn- set-rec [lang-code unicode-set]
+  (let [loc (lang-code-to-locale lang-code)]
+    {:locale loc
+     :name (loc-to-name loc)
+     :set unicode-set}))
+
+(defn- calc-lang-sets []
+  [(set-rec "pl" pl-diff)
+   (set-rec "es" es-diff)
+   (set-rec "tr" tr-diff)
+   (set-rec "sl" sl-diff)
+   ;(set-rec "de" umlauts)
+   ])
+
+(defn- calc-non-lang-sets []
+  [{:name "latin"
+    :range [0x0020 0x24F]}
+   {:name "scandinavian"
+    :set #{198 230 197 229 196 228 216 248 214 246}}
+   {:name "umlauts" :set umlauts}
+   {:name "forward-accent-vorwels" :set forward-accent-vowels}
+   {:name "backward-accent-vorwels" :set backward-accent-vowels}
+   {:name "hat-accent-vorwels" :set hat-accent-vowels}])
+
+(defn- unicodes-for-regex [uranges regex]
+  (->> uranges
+       (map (fn [[name _]]
+              (if (re-find regex name)
+                name)))
+       (remove nil?)
+       set))
+
+(defn- calc-lang-to-unicode [uranges]
+  {;"Latin" #{"Basic Latin" "Latin-1 Supplement" "Latin Extended-A" "Latin Extended-B"}
+   "Greek" #{"Greek and Coptic" "Greek Extended"}
+   "Russian" #{"Cyrillic" "Cyrillic Supplementary"}
+   "Hindi" #{"Devanagari"}
+   "Thai" #{"Thai"}
+   "Chinese Traditional" (unicodes-for-regex uranges #"(CJK|Bopomofo)")
+   "Japanese" (unicodes-for-regex uranges #"^(Katakana|Kanbun|Hiragana)")
+   "Korean" (unicodes-for-regex uranges #"^Hangul")
+   "Arabic" (unicodes-for-regex uranges #"^Arabic")})
+
+(defn- calc-locale-keys []
+  (let [uranges (unicode-ranges)
+        lang-to-unicode (calc-lang-to-unicode uranges)]
+    (->> uranges
+         (map first)
+         (concat (keys lang-to-unicode)
+                 (->> (calc-non-lang-sets) (map :name))
+                 (->> (calc-lang-sets) (map :name)))
+         distinct
+         sort
+         vec)))
+
+(defn locale-keys
+  "Return a sequence of nominals that could be returned via"
+  []
+  (swap! locale-keys-inst #(or % (calc-locale-keys))))
+
 (defn- create-unicodes
   "Return a map of Unicode ranges with associcated locale and name information.
   For keys, see **:name** of [[unicode-for-char]]."
   []
-  (letfn [(unicodes-for-regex [uranges regex]
-            (->> uranges
-                 (map (fn [[name _]]
-                        (if (re-find regex name)
-                          name)))
-                 (remove nil?)
-                 set))
-          (loc-to-name [loc]
-            (format "lang-%s" (locale-to-lang-code loc)))
-          (set-rec [lang-code unicode-set]
-            (let [loc (lang-code-to-locale lang-code)]
-              {:locale loc
-               :name (loc-to-name loc)
-               :set unicode-set}))]
-    (let [uranges (unicode-ranges)
-          lang-to-unicode {"Greek" #{"Greek and Coptic" "Greek Extended"}
-                           "Russian" #{"Cyrillic" "Cyrillic Supplementary"}
-                           "Hindi" #{"Devanagari"}
-                           "Thai" #{"Thai"}
-                           "Chinese Traditional" (unicodes-for-regex uranges #"(CJK|Bopomofo)")
-                           "Japanese" (unicodes-for-regex uranges #"^(Katakana|Kanbun|Hiragana)")
-                           "Korean" (unicodes-for-regex uranges #"^Hangul")
-                           "Arabic" (unicodes-for-regex uranges #"^Arabic")}
-          pl-alph #{65 97 260 261 66 98 67 99 262 263 68 100 69 101 280 281 70
-                    102 71 103 72 104 73 105 74 106 75 107 76 108 321 322 77
-                    109 78 110 323 324 79 111 211 243 80 112 82 114 83 115 346
-                    347 84 116 85 117 87 119 89 121 90 122 377 378 379 380}
-          pl-diff #{260 262 280 321 323 211 346 379 261 263 281 322 324
-                    243 347 378 380}
-          es-diff #{191 161 241 209}
-          de-diff #{223}
-          tr-diff #{287 286 305 304 246 214 252 220 351 350 231 199}
-          ru-alph (set (range 0x410 0x450))
-          uk-alph #{1040 1072 1041 1073 1042 1074 1043 1075 1168 1169 1044
-                    1076 1045 1077 1028 1108 1046 1078 1047 1079 1048 1080
-                    1030 1110 1031 1111 1049 1081 1050 1082 1051 1083 1084
-                    1053 1085 1054 1086 1055 1087 1056 1088 1057 1089 1058
-                    1090 1059 1091 1060 1092 1061 1093 1062 1094 1063 1095
-                    1064 1096 1065 1097 1068 1100 1070 1102 1071 1103}
-          uk-diff (difference ru-alph uk-alph)
-          sl-diff #{268 269 352 353 381 382}
-          ro-diff #{258 259 194 226 206 238 536 537 538 539}
-          umlauts #{196 228 214 246 220 252}
-          non-lang-sets [{:name "scandinavian"
-                          :set #{198 230 197 229 196 228 216 248 214 246}}
-                         {:name "umlauts" :set umlauts}]
-          lang-sets [(set-rec "pl" pl-diff)
-                     (set-rec "es" es-diff)
-                     (set-rec "tr" tr-diff)
-                     (set-rec "sl" sl-diff)
-                     (set-rec "de" umlauts)]]
-      (->> ((or @name-to-locale-fn-inst
-                name-to-locale))
-           (map (fn [[lang-code loc]]
-                  (let [unames (or (get lang-to-unicode lang-code) (list lang-code))
-                        uranges (->> unames (map #(get uranges %)) (remove nil?))
-                        name (loc-to-name loc)]
-                    (if-not (empty? uranges)
-                      {name {:locale loc
-                             :name name
-                             :ranges uranges}}))))
-           (remove nil?)
-           (concat (map #(hash-map (-> % :locale loc-to-name) %) lang-sets))
-           (concat (map #(hash-map (:name %) %) non-lang-sets))
-           (apply merge)))))
+  (let [uranges (unicode-ranges)
+        lang-to-unicode (calc-lang-to-unicode uranges)
+        non-lang-sets (calc-non-lang-sets)
+        lang-sets (calc-lang-sets)]
+    (->> ((or @name-to-locale-fn-inst
+              name-to-locale))
+         (map (fn [[lang-code loc]]
+                (let [unames (or (get lang-to-unicode lang-code) (list lang-code))
+                      uranges (->> unames (map #(get uranges %)) (remove nil?))
+                      name (loc-to-name loc)]
+                  (if-not (empty? uranges)
+                    {name {:locale loc
+                           :name name
+                           :ranges uranges}}))))
+         (remove nil?)
+         (concat (map #(hash-map (-> % :locale loc-to-name) %) lang-sets))
+         (concat (map #(hash-map (:name %) %) non-lang-sets))
+         (apply merge))))
 
 (defn- unicodes []
   (swap! unicodes-inst #(or % (create-unicodes))))
