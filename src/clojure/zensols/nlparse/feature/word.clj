@@ -67,12 +67,14 @@
 
 (defn dictionary-feature-metas
   "See [[dictionary-features]]."
-  [lang-codes]
-  (->> lang-codes
-       (map dictionary-wl-key)
-       (concat (if (contains? (set lang-codes) "en")
-                 [:wn-en-dict-ratio]))
-       (map (fn [kw] [kw 'numeric]))))
+  ([]
+   (dictionary-features #{"en"}))
+  ([lang-codes]
+   (->> lang-codes
+        (map dictionary-wl-key)
+        (concat (if (contains? (set lang-codes) "en")
+                  [:wn-en-dict-ratio]))
+        (map (fn [kw] [kw 'numeric])))))
 
 
 
