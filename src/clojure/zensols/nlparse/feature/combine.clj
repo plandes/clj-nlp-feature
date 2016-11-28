@@ -23,27 +23,37 @@
   (let [cfeats (if combined-features @combined-features)
         fmap (->> fmap
                   (map (fn [[fkey form]]
+                         (log/tracef "%s => %s" fkey (get cfeats fkey))
                           (let [feats (or (and cfeats (get cfeats fkey))
                                           ((eval form)))]
                             {fkey feats})))
                   (apply merge))]
     (when combined-features
-      (log/tracef "combined: %s" (pr-str @combined-features))
-      (swap! combined-features merge fmap))
+      (swap! combined-features merge fmap)
+      (log/debugf "combined: %s" (pr-str @combined-features)))
     (->> fmap vals (apply merge))))
 
 (defmacro combine-features
   "Combine features from the forms for which features don't already exist in
   **features**, which is a map with functions as keys and features already
-  created with that function as the value of the respective function."
+  created with that function as the value of the respective function.
+
+  Limitations: each form must be a function call and not a macro or any other
+  special form."
   [& forms]
-  (log/tracef "macro combine features for %s" (pr-str forms))
+  (log/debugf "macro combine features for %s" (pr-str forms))
+  ;; var-get was used below where `.toString` is currently but in the call to
+  ;; `combine-feature-values` yielded differn functions (memory locations) as
+  ;; if they were re-evaled for every call--maybe this is some Clojure language
+  ;; speed up method at play; remains a mystery
   `(->> (merge ~@(->> (map (fn [form]
                              (->> form first
                                   (ns-resolve (ns-name *ns*))
-                                  var-get
+                                  .toString
                                   (#(hash-map % (read-string
                                                  (str "#" (pr-str form)))))))
                            forms)
+                      (#(do (log/tracef "fmap macro: %s" (pr-str %)) %))
                       doall))
+        (#(do (log/tracef "fmap: %s" %) %))
         combine-feature-values))
