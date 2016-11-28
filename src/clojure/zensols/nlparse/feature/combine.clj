@@ -9,7 +9,7 @@
 
 (defmacro with-combined-features
   "Create a lexical context of combined features.  Wrap this around all of your
-  feature genertion function calls.  To be used with [[combine-features]]."
+  feature generation function calls.  To be used with [[combine-features]]."
   {:style/indent 0}
   [& forms]
   `(binding [combined-features (atom {})]
@@ -24,9 +24,9 @@
         fmap (->> fmap
                   (map (fn [[fkey form]]
                          (log/tracef "%s => %s" fkey (get cfeats fkey))
-                          (let [feats (or (and cfeats (get cfeats fkey))
-                                          ((eval form)))]
-                            {fkey feats})))
+                         (let [feats (or (and cfeats (get cfeats fkey))
+                                         ((eval form)))]
+                           {fkey feats})))
                   (apply merge))]
     (when combined-features
       (swap! combined-features merge fmap)
