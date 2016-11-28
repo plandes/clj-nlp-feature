@@ -1,19 +1,25 @@
-(ns zensols.nlparse.combine
+(ns zensols.nlparse.feature.combine
   (:require [clojure.tools.logging :as log]))
 
 (def ^{:dynamic true :private true}
-  combined-features nil)
+  combined-features
+  "Stores the intermediate results of the combined features to avoid
+  re-computation."
+  nil)
 
 (defmacro with-combined-features
+  "Create a lexical context of combined features.  Wrap this around all of your
+  feature genertion function calls.  To be used with [[combine-features]]."
   {:style/indent 0}
   [& forms]
   `(binding [combined-features (atom {})]
      (do ~@forms)))
 
-(defn combine-feature-vals
+(defn combine-feature-values
   "Apply feature creation functions only where they don't already exist
   in [[combined-features]]."
   [fmap]
+  (log/tracef "combine feature values for %s" (pr-str fmap))
   (let [cfeats (if combined-features @combined-features)
         fmap (->> fmap
                   (map (fn [[fkey form]]
@@ -31,6 +37,7 @@
   **features**, which is a map with functions as keys and features already
   created with that function as the value of the respective function."
   [& forms]
+  (log/tracef "macro combine features for %s" (pr-str forms))
   `(->> (merge ~@(->> (map (fn [form]
                              (->> form first
                                   (ns-resolve (ns-name *ns*))
@@ -39,4 +46,4 @@
                                                  (str "#" (pr-str form)))))))
                            forms)
                       doall))
-        combine-feature-vals))
+        combine-feature-values))
