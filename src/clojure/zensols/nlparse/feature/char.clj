@@ -3,7 +3,8 @@
     zensols.nlparse.feature.char
   (:import com.zensols.util.StringUtils)
   (:require [clojure.string :as s]
-            [clojure.set :refer (union)])
+            [clojure.set :refer (union)]
+            [clojure.tools.logging :as log])
   (:require [clojure.core.matrix.stats :as stat])
   (:require [zensols.nlparse.locale :as lc]
             [zensols.nlparse.feature.util :refer :all]))
@@ -244,6 +245,7 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
     * **:caps-capitalized** number of capitalied tokens (i.e. `Yes`)
     * **:caps-all** number of all caps tokens (i.e. `YES`)"
   [tokens]
+  (log/tracef "capital features for <%s>" (pr-str tokens))
   (let [toks (map :text tokens)
         [cap capitalized caps]
         (StringUtils/countCapitals (into-array String toks))
