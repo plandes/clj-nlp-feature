@@ -12,8 +12,7 @@
     </appenders>
 
     <loggers>
-        <logger name="zensols.nlparse.feature.combine" level="off"/>
-        <logger name="zensols.nlparse.feature.char" level="trace"/>
+        <logger name="zensols.nlparse" level="info"/>
         <root level="warn">
             <appenderRef ref="console"/>
             <appenderRef ref="repl"/>
