@@ -14,6 +14,7 @@
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
   :exclusions [org.slf4j/slf4j-log4j12
+               log4j/log4j
                ch.qos.logback/logback-classic]
   :dependencies [[org.clojure/clojure "1.8.0"]
 
@@ -25,7 +26,7 @@
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.11"]
+                 [com.zensols.tools/actioncli "0.0.12"]
 
                  ;; language name to locale
                  [com.neovisionaries/nv-i18n "1.11"]
@@ -44,4 +45,4 @@
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
-              :dependencies [[com.zensols/clj-append "1.0.4"]]}})
+              :dependencies [[com.zensols/clj-append "1.0.5"]]}})
