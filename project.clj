@@ -38,4 +38,9 @@
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
-              :dependencies [[com.zensols/clj-append "1.0.5"]]}})
+              :exclusions [org.slf4j/slf4j-log4j12
+                           ch.qos.logback/logback-classic]
+              :dependencies [[org.apache.logging.log4j/log4j-core "2.3"]
+                             [org.apache.logging.log4j/log4j-slf4j-impl "2.3"]
+                             [org.apache.logging.log4j/log4j-jcl "2.3"]
+                             [com.zensols/clj-append "1.0.4"]]}})
