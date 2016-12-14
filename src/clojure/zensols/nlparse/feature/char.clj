@@ -36,7 +36,7 @@
   characters
 
   All where `N` is **unique-char-repeats**, which is a range from 1 to `N` of
-  the grouping of consecutive characters.  For example the string
+  the grouping of consecutive characters.  For example the string:
 
 ```
           1         2         3         4         5
@@ -127,7 +127,8 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
    {:char-dist-unique (count char-dist)
     :char-dist-unique-ratio (ratio-neg-if-empty (count char-dist) len)
     :char-dist-count len
-    :char-dist-variance (if (= len 0) -1 (->> char-dist stat/variance))
+    :char-dist-variance (if (<= (count char-dist) 1)
+                          -1 (->> char-dist stat/variance))
     :char-dist-mean (if (= len 0) -1 (->> char-dist stat/mean))}))
 
 ;; punctuation
