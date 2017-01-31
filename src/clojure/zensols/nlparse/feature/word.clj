@@ -87,7 +87,9 @@
            (/ % (count tokens))
            0))))
 
-(defn token-features [panon tokens]
+(defn token-features
+  "Return token features for **panon** for all **tokens**."
+  [panon tokens]
   {:utterance-length (count (:text panon))
    :mention-count (count (:mentions panon))
    :sent-count (count (:sents panon))
@@ -96,7 +98,9 @@
    :stopword-count (->> tokens (map #(if (:stopword %) 1 0)) (reduce +))
    :is-question (= "?" (-> tokens last :text))})
 
-(defn token-feature-metas []
+(defn token-feature-metas
+  "Metadata for [[token-features]]."
+  []
   [[:utterance-length 'numeric]
    [:mention-count 'numeric]
    [:sent-count 'numeric]
