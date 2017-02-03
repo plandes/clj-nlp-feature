@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
-- Adding travis build
-
+### Added
+- Travis build
 
 ## [0.0.5] - 2017-02-02
 ### Added
