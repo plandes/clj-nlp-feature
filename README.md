@@ -109,7 +109,7 @@ An extensive changelog is available [here](CHANGELOG.md).
 
 ## License
 
-Copyright © 2016 Paul Landes
+Copyright © 2016, 2017 Paul Landes
 
 Apache License version 2.0
 
