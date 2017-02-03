@@ -14,7 +14,7 @@ In your `project.clj` file, add:
 
 ## Documentation
 
-Additional [documentation](https://plandes.github.io/clj-nlp-feature/codox/index.html).
+API [documentation](https://plandes.github.io/clj-nlp-feature/codox/index.html).
 
 
 ## Usage
