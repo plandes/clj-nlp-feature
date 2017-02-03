@@ -1,5 +1,10 @@
 # Natural Language Feature Creation
 
+[![Travis CI Build Status][travis-badge]][travis-link]
+
+  [travis-link]: https://travis-ci.org/plandes/clj-nlp-feature
+  [travis-badge]: https://travis-ci.org/plandes/clj-nlp-feature.svg?branch=master
+
 This library provides simple character and token based feature creation
 functions.  For additiona feature libraries and examples of how to use this
 library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
