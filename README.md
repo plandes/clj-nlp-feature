@@ -10,6 +10,16 @@ functions.  For additiona feature libraries and examples of how to use this
 library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
 
 
+## Contents
+
+* [Obtaining](#obtaining)
+* [Documentation](#documentation)
+* [Usage](#usage)
+* [Building](#building)
+* [Changelog](#changelog)
+* [License](#license)
+
+
 ## Obtaining
 
 In your `project.clj` file, add:
@@ -98,14 +108,19 @@ the [GNU Aspell](http://aspell.net) dictionaries.
 
 ## Building
 
-All [leiningen](http://leiningen.org) tasks will work in this project.  For
-additional build functionality (git tag convenience utility functionality)
-clone the [Clojure build repo](https://github.com/plandes/clj-zenbuild) in the
-same (parent of this file) directory as this project:
+To build from source, do the folling:
+
+- Install [Leiningen](http://leiningen.org) (this is just a script)
+- Install [GNU make](https://www.gnu.org/software/make/)
+- Install [Git](https://git-scm.com)
+- Download the source: `git clone https://github.com/clj-nlp-feature && cd clj-nlp-feature`
+- Download the make include files:
 ```bash
-   cd ..
-   git clone https://github.com/plandes/clj-zenbuild
+mkdir ../clj-zenbuild && wget -O - https://api.github.com/repos/plandes/clj-zenbuild/tarball | tar zxfv - -C ../clj-zenbuild --strip-components 1
 ```
+- Compile: `make compile` do compile or `make install` to install in your local
+  maven repo.
+
 
 ## Changelog
 
