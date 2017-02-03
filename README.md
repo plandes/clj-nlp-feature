@@ -102,6 +102,11 @@ same (parent of this file) directory as this project:
    git clone https://github.com/plandes/clj-zenbuild
 ```
 
+## Changelog
+
+An extensive changelog is available [here](CHANGELOG.md).
+
+
 ## License
 
 Copyright © 2016 Paul Landes
