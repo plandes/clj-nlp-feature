@@ -6,3 +6,7 @@ ZBHOME ?=	../clj-zenbuild
 all:		jar
 
 include $(ZBHOME)/src/mk/compile.mk
+
+.PHONY: test
+test:
+	$(LEIN) test
