@@ -143,7 +143,7 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
 (defn punctuation-features
   "Return the following features from **text**:
 
-   * **:punctuation-count** the count of [[punctuation]
+   * **:punctuation-count** the count of [[punctuation]]
    * **:punctuation-ratio** the ratio of count of [[punctuation]] to the length
    * **:latin-non-alpha-numeric-count** like **:punctuation-count**but with [[latin-non-alpha-numeric]]
    * **:latin-non-alpha-numeric-ratio** like **:punctuation-ratio**but with [[latin-non-alpha-numeric]]"
