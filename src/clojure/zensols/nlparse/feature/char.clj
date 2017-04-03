@@ -240,11 +240,20 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
 ;; capitalized
 (defn capital-features
   "Return features based on counts of capitalization of **tokens**.  Features
-  returned include (all integers):
+returned include (all integers):
 
-    * **:caps-first-char** number of first character being capital (i.e. `Yes`, `YEs`, `YES`)
-    * **:caps-capitalized** number of capitalied tokens (i.e. `Yes`)
-    * **:caps-all** number of all caps tokens (i.e. `YES`)"
+  * **:caps-first-char-count** number of first character being capital (i.e. `Yes`, `YEs`, `YES`)
+  * **:caps-first-char-ratio** number of first character being
+  capital (i.e. `Yes`, `YEs`, `YES`) as a ratio to all characters across all
+  tokens
+  * **:caps-capitalized-count** number of capitalied tokens (i.e. `Yes`)
+  * **:caps-capitalized-ratio** number of capitalied tokens (i.e. `Yes`) as a
+  ratio to all other characters across all tokens
+  * **:caps-all-count** number of all caps tokens (i.e. `YES`)
+  * **:caps-all-ratio** number of all caps tokens (i.e. `YES`) as a ratio to
+  all other characters across all tokens
+  * **:cap-utterance** `true` if there exist any capitals in any tokens or
+  `false` otherwise"
   [tokens]
   (log/tracef "capital features for <%s>" (pr-str tokens))
   (let [toks (map :text tokens)
