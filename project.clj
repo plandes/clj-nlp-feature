@@ -35,6 +35,7 @@
                  [net.sf.extjwnl/extjwnl "1.9"]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
   :profiles {:appassem {:aot :all}
+             :snapshot {:git-version {:version-cmd "echo -snapshot"}}
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
