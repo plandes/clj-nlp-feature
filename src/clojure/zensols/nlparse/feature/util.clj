@@ -65,3 +65,10 @@
       (/ (->> items (map true-fn)
               (filter true?) count)
          cnt))))
+
+(defn or-empty-0
+  "If sequence **seq** is non-empty, apply **afn** to seq.  Otherwise return 0."
+  [seq afn]
+  (if (or (not seq) (empty? seq) (nil? (first seq)))
+    0
+    (afn seq)))

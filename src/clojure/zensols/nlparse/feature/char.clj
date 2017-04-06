@@ -148,16 +148,23 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
    * **:latin-non-alpha-numeric-count** like **:punctuation-count**but with [[latin-non-alpha-numeric]]
    * **:latin-non-alpha-numeric-ratio** like **:punctuation-ratio**but with [[latin-non-alpha-numeric]]"
   [text]
-  (let [feats (reduce (fn [{:keys [punc latin-nan]} char]
+  (let [feats (reduce (fn [{:keys [punc latin-nan question explanation]} char]
                         {:punc (+ punc (if (contains? punctuation char) 1 0))
                          :latin-nan (+ latin-nan
                                        (if (contains? latin-non-alpha-numeric char)
-                                         1 0))})
-                      {:punc 0 :latin-nan 0}
+                                         1 0))
+                         :question (+ question (if (= char \?) 1 0))
+                         :explanation (+ explanation (if (= char \!) 1 0))})
+                      {:punc 0 :latin-nan 0 :question 0 :explanation 0}
                       text)
+        {:keys [punc latin-nan question explanation]} feats
         len (count text)]
-    {:punctuation-count (:punc feats)
-     :punctuation-ratio (ratio-neg-if-empty (:punc feats) len)
+    {:punctuation-count punc
+     :punctuation-ratio (ratio-neg-if-empty punc len)
+     :question-count question
+     :question-ratio (ratio-neg-if-empty question len)
+     :explanation-count explanation
+     :explanation-ratio (ratio-neg-if-empty explanation len)
      :latin-non-alpha-numeric-count (:latin-nan feats)
      :latin-non-alpha-numeric-ratio (ratio-neg-if-empty (:latin-nan feats) len)}))
 
@@ -166,6 +173,10 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
   []
   [[:punctuation-count 'numeric]
    [:punctuation-ratio 'numeric]
+   [:question-ratio 'numeric]
+   [:question-count 'numeric]
+   [:explanation-ratio 'numeric]
+   [:explanation-count 'numeric]
    [:latin-non-alpha-numeric-count 'numeric]
    [:latin-non-alpha-numeric-ratio 'numeric]])
 

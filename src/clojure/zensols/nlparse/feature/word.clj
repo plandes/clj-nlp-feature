@@ -80,15 +80,26 @@
 
 ;; token
 (defn- token-average-length [tokens]
-  (->> (map :text tokens)
-       (map count)
-       (apply +)
-       (#(if (> (count tokens) 0)
-           (/ % (count tokens))
-           0))))
+  (let [cnt (count tokens)
+        char-len (->> (map :text tokens)
+                      (map count)
+                      (apply +))]
+    (if (> cnt 0)
+      (/ char-len cnt)
+      0)))
 
 (defn token-features
-  "Return token features for **panon** for all **tokens**."
+  "Return token features for **panon** for all **tokens**.  The following
+  features are given:
+
+  **:utterance-length** The character length of the utterance.
+  **:mention-count** Number of mentions in the utterance.
+  **:sent-count** Number of sentences in the utterance.
+  **:token-count** Total tokens across all sentences.
+  **:token-average-length** Average character lenght of all tokens.
+  **:stopword-count** Number of stop words in hte utterance.
+  **:is-question** Whether or not the last token across all sentences is a
+  question."
   [panon tokens]
   {:utterance-length (count (:text panon))
    :mention-count (count (:mentions panon))
