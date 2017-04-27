@@ -5,6 +5,7 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0"
             :distribution :repo}
   :plugins [[lein-codox "0.10.0"]
+            [lein-javadoc "0.3.0"]
             [org.clojars.cvillecsteele/lein-git-version "1.2.7"]]
   :codox {:metadata {:doc/format :markdown}
           :project {:name "NLP Feature Creation"}
@@ -12,6 +13,8 @@
   :git-version {:root-ns "zensols.nlparse.version"
                 :path "src/clojure/zensols/nlparse/version"
                 :version-cmd "git describe --match v*.* --abbrev=4 --dirty=-dirty"}
+  :javadoc-opts {:package-names ["com.zensols.util"]
+                 :output-dir "target/doc/apidocs"}
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]

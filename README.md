@@ -29,7 +29,9 @@ In your `project.clj` file, add:
 
 ## Documentation
 
-API [documentation](https://plandes.github.io/clj-nlp-feature/codox/index.html).
+API documentation:
+* [Java](https://plandes.github.io/clj-nlp-feature/apidocs/index.html)
+* [Clojure](https://plandes.github.io/clj-nlp-feature/codox/index.html)
 
 
 ## Usage
