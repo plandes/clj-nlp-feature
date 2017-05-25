@@ -2,9 +2,7 @@
       :author "Paul Landes"}
     zensols.nlparse.feature.util
   (:require [clojure.tools.logging :as log]
-            [clojure.string :as s])
-  (:require [zensols.nlparse.wordnet :as wn]
-            [zensols.nlparse.wordlist :as wl]))
+            [clojure.string :as s]))
 
 (def none-label
   "Value used for missing features."
