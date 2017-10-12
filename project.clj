@@ -22,7 +22,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.16"]
+                 [com.zensols.tools/actioncli "0.0.19"]
 
                  ;; language name to locale
                  [com.neovisionaries/nv-i18n "1.11"]
@@ -35,14 +35,14 @@
 
                  ;; NLP
                  ;; wordnet
-                 [net.sf.extjwnl/extjwnl "1.9"]
+                 [net.sf.extjwnl/extjwnl "1.9"
+                  :exclusions [org.slf4j/slf4j-api
+                               org.slf4j/slf4j-log4j12]]
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
-  :profiles {:appassem {:aot :all}
-             :snapshot {:git-version {:version-cmd "echo -snapshot"}}
-             :dev
-             {:jvm-opts
-              ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
-              :exclusions [org.slf4j/slf4j-log4j12]
-              :dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
-                             [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]
-                             [com.zensols/clj-append "1.0.5"]]}})
+  :profiles {:snapshot {:git-version {:version-cmd "echo -snapshot"}}
+             :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
+                                       [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}
+             :appassem {:aot :all}
+             :test
+             {:jvm-opts ["-Dlog4j.configurationFile=test-resources/test-log4j2.xml"
+                         "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]}})

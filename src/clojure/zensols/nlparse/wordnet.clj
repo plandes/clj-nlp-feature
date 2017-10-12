@@ -3,8 +3,7 @@
     zensols.nlparse.wordnet
   (:import net.sf.extjwnl.dictionary.Dictionary
            (net.sf.extjwnl.data POS))
-  (:require [clojure.string :as str])
-  (:require [zensols.actioncli.dynamic :refer (defa-)]))
+  (:require [clojure.string :as str]))
 
 (def ^:private word-pattern (re-pattern "^\\w+$"))
 
@@ -34,7 +33,7 @@
   include [[pos-verb]], [[pos-noun]], [[pos-adverb]], [[pos-adjective]]."
   (POS/getAllPOS))
 
-(defa- wndict-inst)
+(defonce ^:private wndict-inst (atom nil))
 
 (defn wordnet-dictionary
   "Return the Wordnet dictionary instance.

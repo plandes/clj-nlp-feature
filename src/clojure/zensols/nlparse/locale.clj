@@ -8,13 +8,9 @@
             [clojure.data.csv :as csv]
             [clojure.tools.logging :as log]
             [clojure.set :refer (difference)])
-  (:require [zensols.actioncli.dynamic :refer (defa- undef)]))
+  (:require [zensols.actioncli.util :refer (defnlock)]))
 
-(def ^:private unicodes-inst (atom nil))
-(def ^:private unicode-to-locale-inst (atom nil))
-(def ^:private unicode-to-locale-vals-inst (atom nil))
-(def ^:private locale-keys-inst (atom nil))
-(defa- name-to-locale-fn-inst)
+(defonce ^:private name-to-locale-fn-inst (atom nil))
 
 (def ^:private pl-alph
   #{65 97 260 261 66 98 67 99 262 263 68 100 69 101 280 281 70
@@ -116,16 +112,19 @@
           (map #(.getDisplayName %))
           (map (fn [lang-name]
                  (when-not (contains? remove-langs lang-name)
-                   (let [lang-name (second (re-find #"^(.+?)(?: (.+))?$" lang-name))
-                         loc (or (get lang-map lang-name)
-                                 (get locale-map lang-name)
-                                 (->> (format ".*%s.*" lang-name)
-                                      LanguageCode/findByName
-                                      first
-                                      (#(if % (.toLocale %)))))]
-                     (log/infof "%s => %s%s" lang-name loc
-                                (if loc "" " (skipping)"))
-                     {lang-name loc}))))
+                   (second (re-find #"^(.+?)(?: (.+))?$" lang-name)))))
+          distinct
+          (remove nil?)
+          (map (fn [lang-name]
+                 (let [loc (or (get lang-map lang-name)
+                               (get locale-map lang-name)
+                               (->> (format ".*%s.*" lang-name)
+                                    LanguageCode/findByName
+                                    first
+                                    (#(if % (.toLocale %)))))]
+                   (log/infof "%s => %s%s" lang-name loc
+                              (if loc "" " (skipping)"))
+                   {lang-name loc})))
           (remove (fn [m] (->> m vals first nil?)))
           (apply merge)))))
 
@@ -167,9 +166,7 @@
   [(set-rec "pl" pl-diff)
    (set-rec "es" es-diff)
    (set-rec "tr" tr-diff)
-   (set-rec "sl" sl-diff)
-   ;(set-rec "de" umlauts)
-   ])
+   (set-rec "sl" sl-diff)])
 
 (defn- calc-non-lang-sets []
   [{:name "latin"
@@ -200,7 +197,9 @@
    "Korean" (unicodes-for-regex uranges #"^Hangul")
    "Arabic" (unicodes-for-regex uranges #"^Arabic")})
 
-(defn- calc-locale-keys []
+(defnlock locale-keys
+  "Return a sequence of nominals that could be returned via"
+  []
   (let [uranges (unicode-ranges)
         lang-to-unicode (calc-lang-to-unicode uranges)]
     (->> uranges
@@ -212,12 +211,7 @@
          sort
          vec)))
 
-(defn locale-keys
-  "Return a sequence of nominals that could be returned via"
-  []
-  (swap! locale-keys-inst #(or % (calc-locale-keys))))
-
-(defn- create-unicodes
+(defnlock ^:private unicode
   "Return a map of Unicode ranges with associcated locale and name information.
   For keys, see **:name** of [[unicode-for-char]]."
   []
@@ -240,13 +234,10 @@
          (concat (map #(hash-map (:name %) %) non-lang-sets))
          (apply merge))))
 
-(defn- unicodes []
-  (swap! unicodes-inst #(or % (create-unicodes))))
-
-(defn- create-unicode-to-locale
+(defnlock ^:private unicode-to-locale
   "Return a map Unicode names to `java.util.Locale`."
   []
-  (->> (unicodes)
+  (->> (unicode)
        vals
        (map (fn [{:keys [ranges set] :as urec}]
               (if ranges
@@ -259,11 +250,8 @@
        (apply concat)
        (apply merge)))
 
-(defn- unicode-to-locale   []
-  (swap! unicode-to-locale-inst #(or % (create-unicode-to-locale))))
-
-(defn- unicode-to-locale-vals []
-  (swap! unicode-to-locale-vals-inst #(or % (vals (unicode-to-locale)))))
+(defnlock ^:private unicode-to-locale-vals []
+  (vals (unicode-to-locale)))
 
 (defn unicode-for-char
   "Return a sequence of Unicode info maps that are in range for characater
@@ -282,7 +270,7 @@
   Another way to say this is that there will not be any overlapping Unicode
   range/set data returned, and thus, results are disjoint."
   ([c]
-   (unicode-for-char false))
+   (unicode-for-char c false))
   ([c best-match?]
    (let [c (int c)]
      (->> (unicode-to-locale-vals)

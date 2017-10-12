@@ -12,7 +12,8 @@
     </appenders>
 
     <loggers>
-        <logger name="zensols.nlparse" level="info"/>
+        <logger name="zensols" level="debug"/>
+        <logger name="zensols.nlparse" level="debug"/>
         <root level="warn">
             <!--appenderRef ref="console"/-->
             <appenderRef ref="repl"/>

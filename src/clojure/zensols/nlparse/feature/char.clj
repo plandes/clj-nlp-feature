@@ -87,7 +87,6 @@ abcabc aabb aaaaaa abcabcabcabc abcdefgabcdefgabcdefg
                           first)
         rng (range 1 (inc unique-char-repeats))
         text-len (count text)]
-    ;(clojure.pprint/pprint reps)
     (->> rng
          (map (fn [ucr]
                 (first (filter #(-> % :unique (= ucr)) reps))))

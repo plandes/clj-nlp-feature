@@ -18,3 +18,14 @@
            (char-dist-features "aaa")))
     (is (= {:char-dist-unique 2 :char-dist-unique-ratio 1/3 :char-dist-count 6 :char-dist-variance 0.0 :char-dist-mean 3}
            (char-dist-features "ababab")))))
+
+(deftest unicode-test
+  (testing "unicode"
+    (is (= {:unicode-range-name-0 "latin"
+            :unicode-range-ratio-0 1
+            :unicode-range-name-1 "<none>"
+            :unicode-range-ratio-1 0
+            :unicode-range-name-2 "<none>"
+            :unicode-range-ratio-2 0
+            :unicode-variance 60.5}
+           (unicode-features "This is a test" 3)))))

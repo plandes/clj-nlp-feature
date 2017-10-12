@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
-
+### Changed
+- Guard locale unicode to locale data structure creation.
+- Dependencies and stricter log dep exclusions.
 
 ## [0.0.6] - 2017-04-27
 ### Added
