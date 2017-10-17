@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+
+## [0.0.7] - 2017-10-17
 ### Changed
 - Guard locale unicode to locale data structure creation.
 - Dependencies and stricter log dep exclusions.
@@ -42,7 +44,8 @@ First major release.
 - Unicode features
 
 
-[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.6...HEAD
+[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.7...HEAD
+[0.0.7]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.3...v0.0.4
