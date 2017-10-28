@@ -22,7 +22,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.21"]
+                 [com.zensols.tools/actioncli "0.0.22"]
 
                  ;; language name to locale
                  [com.neovisionaries/nv-i18n "1.11"]
