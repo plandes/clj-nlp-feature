@@ -42,7 +42,7 @@
 
   ```
   (with-dictionary dict
-  (.lookupAllIndexWords dict))
+    (.lookupAllIndexWords dict))
   ```"
   {:style/indent 1}
   [dict-sym & forms]
