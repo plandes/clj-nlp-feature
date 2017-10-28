@@ -55,7 +55,6 @@
                                   (#(hash-map % (read-string
                                                  (str "#" (pr-str form))))))))
                       (#(do (log/tracef "fmap macro: %s" (pr-str %)) %))
-                      doall)
-               doall)
+                      doall))
         (#(do (log/tracef "fmap: %s" %) %))
         combine-feature-values))

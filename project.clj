@@ -22,7 +22,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.20"]
+                 [com.zensols.tools/actioncli "0.0.21"]
 
                  ;; language name to locale
                  [com.neovisionaries/nv-i18n "1.11"]
@@ -43,6 +43,7 @@
              :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
                                        [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}
              :appassem {:aot :all}
+             :dev {:dependencies [[net.sf.extjwnl/extjwnl "1.9" :classifier "sources"]]}
              :test
              {:jvm-opts ["-Dlog4j.configurationFile=test-resources/test-log4j2.xml"
                          "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]}})

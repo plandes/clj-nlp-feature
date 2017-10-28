@@ -1,8 +1,8 @@
 (ns ^{:doc "Wraps the [Extended Java WordNet Library](http://extjwnl.sourceforge.net/javadocs/)."
       :author "Paul Landes"}
     zensols.nlparse.wordnet
-  (:import net.sf.extjwnl.dictionary.Dictionary
-           (net.sf.extjwnl.data POS))
+  (:import [net.sf.extjwnl.dictionary Dictionary]
+           [net.sf.extjwnl.data POS])
   (:require [clojure.string :as str]))
 
 (def ^:private word-pattern (re-pattern "^\\w+$"))
@@ -33,26 +33,33 @@
   include [[pos-verb]], [[pos-noun]], [[pos-adverb]], [[pos-adjective]]."
   (POS/getAllPOS))
 
-(defonce ^:private wndict-inst (atom nil))
+(def ^:private dict (Dictionary/getDefaultResourceInstance))
 
-(defn wordnet-dictionary
-  "Return the Wordnet dictionary instance.
+(defmacro with-dictionary
+  "Use a dictionary and set the symbol **dict-sym**.
 
-  See the [Java
-  example](https://github.com/extjwnl/extjwnl/blob/master/utilities/src/main/java/net/sf/extjwnl/utilities/Examples.java)"
-  []
-  (swap! wndict-inst #(or % (Dictionary/getDefaultResourceInstance))))
+  Example usage:
+
+  ```
+  (with-dictionary dict
+  (.lookupAllIndexWords dict))
+  ```"
+  {:style/indent 1}
+  [dict-sym & forms]
+  `(let [~dict-sym dict]
+     ~@forms))
 
 (defn lookup-word
   "Lookup a word (lemmatized) in wordnet.
 
   * **pos-tag** type of POS/VERB and one of the pos-noun,verb etc"
   ([lemma]
-   (let [dict (wordnet-dictionary)
-         words (.lookupAllIndexWords dict lemma)]
-     (into [] (.getIndexWordCollection words))))
+   (with-dictionary dict
+     (->> (.lookupAllIndexWords dict lemma)
+          .getIndexWordCollection
+          (into []))))
   ([lemma pos-tag]
-   (let [dict (wordnet-dictionary)]
+   (with-dictionary dict
      [(.lookupIndexWord dict pos-tag lemma)])))
 
 (defn verb-frame-flags
@@ -104,7 +111,7 @@
 (defn lookup-word-by-sense
   "Lookup a word by sense (i.e. `buy%2:40:00::`)."
   [sense-key]
-  (let [dict (wordnet-dictionary)]
+  (with-dictionary dict
     ;; sense key is found in verbnet (get-13.5.1.xml)
     (.getWordBySenseKey dict sense-key)))
 
@@ -112,14 +119,14 @@
   "Return whether **word** looks like a present tense word."
   [word]
   (let [lword (str/lower-case word)]
-    (let [dict (wordnet-dictionary)
-          iword (.lookupIndexWord dict POS/VERB lword)]
-      (if-not iword
-        false
-        (= lword (.getKey iword))))))
+    (with-dictionary dict
+      (let [iword (.lookupIndexWord dict POS/VERB lword)]
+        (if-not iword
+          false
+          (= lword (.getKey iword)))))))
 
 (defn to-present-tense-verb
   "Return the present tense of **verb**."
   [word]
-  (let [dict (wordnet-dictionary)]
+  (with-dictionary dict
     (.lookupIndexWord dict POS/VERB word)))

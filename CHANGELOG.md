@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.0.8] - 2017-10-27
+### Changed
+- Lazy sequence in combine fix.
+- Tighter control on Wordnet resources.
+- Actioncli deps
+
 ## [0.0.7] - 2017-10-17
 ### Changed
 - Guard locale unicode to locale data structure creation.
@@ -44,7 +50,8 @@ First major release.
 - Unicode features
 
 
-[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.7...HEAD
+[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.8...HEAD
+[0.0.8]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.4...v0.0.5
