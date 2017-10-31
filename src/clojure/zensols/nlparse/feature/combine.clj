@@ -25,10 +25,9 @@
                   (map (fn [[fkey form]]
                          (log/tracef "%s => %s" fkey (get cfeats fkey))
                          (let [feats (or (and cfeats (get cfeats fkey))
-                                         ((eval form)))]
+                                         (doall ((eval form))))]
                            {fkey feats})))
-                  (apply merge)
-                  doall)]
+                  (apply merge))]
     (when combined-features
       (swap! combined-features merge fmap)
       (log/debugf "combined: %s" (pr-str @combined-features)))
@@ -47,14 +46,14 @@
   ;; `combine-feature-values` yielded differn functions (memory locations) as
   ;; if they were re-evaled for every call--maybe this is some Clojure language
   ;; speed up method at play; remains a mystery
-  `(->> (merge ~@(->> forms
-                      (map (fn [form]
-                             (->> form first
-                                  (ns-resolve (ns-name *ns*))
-                                  .toString
-                                  (#(hash-map % (read-string
-                                                 (str "#" (pr-str form))))))))
-                      (#(do (log/tracef "fmap macro: %s" (pr-str %)) %))
-                      doall))
-        (#(do (log/tracef "fmap: %s" %) %))
+  `(->> ~@(->> forms
+               (map (fn [form]
+                      (->> form first
+                           (ns-resolve (ns-name *ns*))
+                           .toString
+                           (#(hash-map % (read-string
+                                          (str "#" (pr-str form))))))))
+               (apply merge)
+               (#(do (log/tracef "fmap macro: %s" (pr-str %)) %))
+               list)
         combine-feature-values))

@@ -33,7 +33,11 @@
   include [[pos-verb]], [[pos-noun]], [[pos-adverb]], [[pos-adjective]]."
   (POS/getAllPOS))
 
-(def ^:private dict (Dictionary/getDefaultResourceInstance))
+(def ^:dynamic *lock-dictionary* false)
+
+(def ^:private dict-inst (Dictionary/getDefaultResourceInstance))
+
+(def ^:private dict-mon (Object.))
 
 (defmacro with-dictionary
   "Use a dictionary and set the symbol **dict-sym**.
@@ -46,8 +50,13 @@
   ```"
   {:style/indent 1}
   [dict-sym & forms]
-  `(let [~dict-sym dict]
-     ~@forms))
+  `(let [~dict-sym dict-inst]
+     (letfn [(forms-fn# []
+               ~@forms)]
+       (if *lock-dictionary*
+         (locking dict-mon
+           (forms-fn#))
+         (forms-fn#)))))
 
 (defn lookup-word
   "Lookup a word (lemmatized) in wordnet.
