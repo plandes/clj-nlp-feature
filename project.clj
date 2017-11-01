@@ -35,15 +35,22 @@
 
                  ;; NLP
                  ;; wordnet
-                 [net.sf.extjwnl/extjwnl "1.9"
-                  :exclusions [org.slf4j/slf4j-api
-                               org.slf4j/slf4j-log4j12]]
-                 [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
+                 ;; [net.sf.extjwnl/extjwnl "1.9.3"
+                 ;;  :exclusions [org.slf4j/slf4j-api
+                 ;;               org.slf4j/slf4j-log4j12]]
+                 ;; [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]
+                 [com.zensols.nlp/wnmap "0.0.1"]
+                 ]
   :profiles {:snapshot {:git-version {:version-cmd "echo -snapshot"}}
              :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
                                        [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}
              :appassem {:aot :all}
-             :dev {:dependencies [[net.sf.extjwnl/extjwnl "1.9" :classifier "sources"]]}
+             :dev {:dependencies [[net.sf.extjwnl/extjwnl "1.9.3"
+                                   :classifier "sources"
+                                   :exclusions [org.slf4j/slf4j-api]]]}
              :test
-             {:jvm-opts ["-Dlog4j.configurationFile=test-resources/test-log4j2.xml"
+             {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
+                             [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]
+              :exclusions [org.slf4j/slf4j-log4j12]
+              :jvm-opts ["-Dlog4j.configurationFile=test-resources/test-log4j2.xml"
                          "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]}})
