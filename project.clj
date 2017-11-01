@@ -39,8 +39,7 @@
                  ;;  :exclusions [org.slf4j/slf4j-api
                  ;;               org.slf4j/slf4j-log4j12]]
                  ;; [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]
-                 [com.zensols.nlp/wnmap "0.0.1"]
-                 ]
+                 [com.zensols.nlp/wordnet-mapres "0.0.1"]]
   :profiles {:snapshot {:git-version {:version-cmd "echo -snapshot"}}
              :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
                                        [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}
