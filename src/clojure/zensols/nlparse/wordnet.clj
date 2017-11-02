@@ -34,25 +34,43 @@
   (POS/getAllPOS))
 
 (defn create-dictionary-context
-  "Create a dictionray context to change the behavior of WordNet lookups."
-  ([] (create-dictionary-context :map))
-  ([resource]
-   (->> (cond (= :map resource)
+  "Create a dictionray context to change the behavior of WordNet lookups.
+
+  The type of dictionary is determined by **resource**, which can be:
+
+  * **:map** *MapBackedDictionary*, which initializes with the dictionary.
+  This is faster but takes more memory.
+  * **:file** *FileBackedDictionary*, which hits a file (resource in our case)
+  for each lookup.  This is slower but takes less memory.
+  * **:default** Same as **:map** and default with 0 arg invocation.
+
+  Note that if a token (word or lemma) is not valid per [[valid-token?]] then
+  any of the lookup function (i.e. [[lookup-word]]) will return an empty list,
+  `nil`, or `false` depending on the function.  See the [keys](#keys) section
+  for more inforamtion.
+
+
+  ## Keys
+
+  * **:max-length** the maximum length or token that prevents a lookup"
+  ([] (create-dictionary-context :default))
+  ([resource & {:keys [max-length]}]
+   (->> (cond (or (= :default resource) (= :map resource))
               (->> "/net/sf/extjwnl/data/wordnet/wn31/map/res_properties.xml"
                    Dictionary/getResourceInstance)
-              (= :default resource)
+              (= :file resource)
               (Dictionary/getDefaultResourceInstance)
               (string? resource)
               (Dictionary/getResourceInstance resource)
               true (-> (format "Unknown resource: %s" resource)
                        (ex-info {:resource resource})
                        throw))
-        (array-map :instance))))
+        (array-map :max-length max-length :instance))))
 
 (def ^:dynamic *dictionary-context*
   "Frameowrk specific variable--use [[with-context]] instead of modifying this
   variable."
-  (create-dictionary-context :map))
+  (create-dictionary-context))
 
 (defmacro with-context
   "Modify the default WordNet dictionary functionality by using a context
@@ -66,7 +84,6 @@
   "Use a dictionary and set the symbol **dict-sym**.
 
   Example usage:
-
   ```
   (with-dictionary dict
     (.lookupAllIndexWords dict))
@@ -76,18 +93,28 @@
   `(let [~dict-sym (->> *dictionary-context* :instance)]
      ~@forms))
 
+(defn valid-token?
+  "Return whether or not **token** is not valid for lookup."
+  [token]
+  (let [{:keys [max-length]} *dictionary-context*]
+    (or (nil? max-length) (< (count token) max-length))))
+
 (defn lookup-word
   "Lookup a word (lemmatized) in wordnet.
 
   * **pos-tag** type of POS/VERB and one of the pos-noun,verb etc"
   ([lemma]
-   (with-dictionary dict
-     (->> (.lookupAllIndexWords dict lemma)
-          .getIndexWordCollection
-          (into []))))
+   (if-not (valid-token? lemma)
+     []
+     (with-dictionary dict
+       (->> (.lookupAllIndexWords dict lemma)
+            .getIndexWordCollection
+            (into [])))))
   ([lemma pos-tag]
-   (with-dictionary dict
-     [(.lookupIndexWord dict pos-tag lemma)])))
+   (if-not (valid-token? lemma)
+     []
+     (with-dictionary dict
+       [(.lookupIndexWord dict pos-tag lemma)]))))
 
 (defn verb-frame-flags
   "If **synset** is a verb type synset return its verb frame flags.  Otherwise
@@ -136,24 +163,30 @@
   (map #(.getLabel %) (POS/values)))
 
 (defn lookup-word-by-sense
-  "Lookup a word by sense (i.e. `buy%2:40:00::`)."
+  "Lookup a word by verbnet *old* sense key.
+
+  For example `buy%2:40:00::` maps to
+  [buy/bought](http://wordnet-rdf.princeton.edu/wn31/buy-v)."
   [sense-key]
   (with-dictionary dict
-    ;; sense key is found in verbnet (get-13.5.1.xml)
     (.getWordBySenseKey dict sense-key)))
 
 (defn present-tense-verb?
   "Return whether **word** looks like a present tense word."
   [word]
   (let [lword (str/lower-case word)]
-    (with-dictionary dict
-      (let [iword (.lookupIndexWord dict POS/VERB lword)]
-        (if-not iword
-          false
-          (= lword (.getKey iword)))))))
+    (if-not (valid-token? word)
+      false
+      (with-dictionary dict
+        (let [iword (.lookupIndexWord dict POS/VERB lword)]
+          (if-not iword
+            false
+            (= lword (.getKey iword))))))))
 
 (defn to-present-tense-verb
   "Return the present tense of **verb**."
   [word]
   (with-dictionary dict
-    (.lookupIndexWord dict POS/VERB word)))
+    (if (valid-token? word)
+      (let [iw (.lookupIndexWord dict POS/VERB word)]
+        (if iw (.getLemma iw))))))
