@@ -33,10 +33,34 @@
   include [[pos-verb]], [[pos-noun]], [[pos-adverb]], [[pos-adjective]]."
   (POS/getAllPOS))
 
-(def ^:private dict-inst
-  ;(Dictionary/getDefaultResourceInstance)
-  (->> "/net/sf/extjwnl/data/wordnet/wn31/map/res_properties.xml"
-       Dictionary/getResourceInstance))
+(defn create-dictionary-context
+  "Create a dictionray context to change the behavior of WordNet lookups."
+  ([] (create-dictionary-context :map))
+  ([resource]
+   (->> (cond (= :map resource)
+              (->> "/net/sf/extjwnl/data/wordnet/wn31/map/res_properties.xml"
+                   Dictionary/getResourceInstance)
+              (= :default resource)
+              (Dictionary/getDefaultResourceInstance)
+              (string? resource)
+              (Dictionary/getResourceInstance resource)
+              true (-> (format "Unknown resource: %s" resource)
+                       (ex-info {:resource resource})
+                       throw))
+        (array-map :instance))))
+
+(def ^:dynamic *dictionary-context*
+  "Frameowrk specific variable--use [[with-context]] instead of modifying this
+  variable."
+  (create-dictionary-context :map))
+
+(defmacro with-context
+  "Modify the default WordNet dictionary functionality by using a context
+  created with [[create-dictionary-contxt]]."
+  {:style/indent 1}
+  [context & forms]
+  `(binding [*dictionary-context* ~context]
+     ~@forms))
 
 (defmacro with-dictionary
   "Use a dictionary and set the symbol **dict-sym**.
@@ -49,7 +73,7 @@
   ```"
   {:style/indent 1}
   [dict-sym & forms]
-  `(let [~dict-sym dict-inst]
+  `(let [~dict-sym (->> *dictionary-context* :instance)]
      ~@forms))
 
 (defn lookup-word
