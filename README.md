@@ -10,16 +10,6 @@ functions.  For additiona feature libraries and examples of how to use this
 library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
 
 
-## Contents
-
-* [Obtaining](#obtaining)
-* [Documentation](#documentation)
-* [Usage](#usage)
-* [Building](#building)
-* [Changelog](#changelog)
-* [License](#license)
-
-
 ## Obtaining
 
 In your `project.clj` file, add:
