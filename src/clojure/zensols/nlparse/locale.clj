@@ -288,8 +288,9 @@
 (defn unicode-counts
   "Return counts of all characters in **text**.  See [[unicode-for-char]].
 
-  Keys
-  ----
+
+  ## Keys
+
   * **:best-match?** see [[unicode-for-char]]; note that counts will differ and
   won't necessarily sum to all combinations of disjoint Unicode ranges/sets"
   [text & {:keys [best-match?] :or {best-match? false}}]
@@ -310,8 +311,8 @@
   "Return counts that are a member of a language mapping (locale) of all
   characters in **text**.  See [[unicode-for-char]].
 
-  Keys
-  ----
+  ## Keys
+
   * **:best-match?** if `true` then return only the best match (i.e. language
   over partial alphabet) per each Unicode range"
   [text & {:keys [best-match?] :or {best-match? false}}]

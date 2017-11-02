@@ -4,7 +4,7 @@
   :license {:name "Apache License version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0"
             :distribution :repo}
-  :plugins [[lein-codox "0.10.0"]
+  :plugins [[lein-codox "0.10.3"]
             [lein-javadoc "0.3.0"]
             [org.clojars.cvillecsteele/lein-git-version "1.2.7"]]
   :codox {:metadata {:doc/format :markdown}
@@ -14,7 +14,8 @@
                 :path "src/clojure/zensols/nlparse/version"
                 :version-cmd "git describe --match v*.* --abbrev=4 --dirty=-dirty"}
   :javadoc-opts {:package-names ["com.zensols.util"]
-                 :output-dir "target/doc/apidocs"}
+                 :output-dir "target/doc/apidocs"
+                 :additional-args ["-Xdoclint:none"]}
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]
