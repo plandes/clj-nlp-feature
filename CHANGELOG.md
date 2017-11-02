@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+## [0.0.9] - 2017-11-02
+### Added
+- In memory implementation of dictionary (MapBackedDictionary implementation).
+- Feature to bail from WordNet dictionary lookups on tokens that are too long.
+
+### Changed
+- Dictionary creation configuration options.
+
+
 ## [0.0.8] - 2017-10-27
 ### Changed
 - Lazy sequence in combine fix.

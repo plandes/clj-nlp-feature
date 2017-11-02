@@ -22,7 +22,7 @@
   :jar-exclusions [#".gitignore"]
   :dependencies [[org.clojure/clojure "1.8.0"]
 
-                 ;; command line
+                 ;; utility libs
                  [com.zensols.tools/actioncli "0.0.22"]
 
                  ;; language name to locale
@@ -34,8 +34,7 @@
                  ;; feature stats
                  [net.mikera/core.matrix.stats "0.7.0"]
 
-                 ;; NLP
-                 ;; wordnet
+                 ;; dictionary features
                  [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]
                  [com.zensols.nlp/wordnet-mapres "0.0.1"]]
   :profiles {:snapshot {:git-version {:version-cmd "echo -snapshot"}}
