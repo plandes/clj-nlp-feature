@@ -16,10 +16,10 @@
 
 (deftest create-test
   (testing "dict type"
-    (with-context (create-dictionary-context :cache)
+    (with-context (create-dictionary-context :map)
       (with-dictionary dict
           (is (instance? net.sf.extjwnl.dictionary.MapBackedDictionary dict))))
-    (with-context (create-dictionary-context :no-cache)
+    (with-context (create-dictionary-context :file)
       (with-dictionary dict
         (is (instance? net.sf.extjwnl.dictionary.FileBackedDictionary dict))))))
 
