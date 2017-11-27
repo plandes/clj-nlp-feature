@@ -55,10 +55,13 @@
   * **:max-length** the maximum length or token that prevents a lookup"
   ([] (create-dictionary-context :default))
   ([resource & {:keys [max-length]}]
-   (->> (cond (or (= :default resource) (= :map resource))
+   (->> (cond (= :map resource)
               (->> "/net/sf/extjwnl/data/wordnet/wn31/map/res_properties.xml"
                    Dictionary/getResourceInstance)
               (= :file resource)
+              (->> "/net/sf/extjwnl/data/wordnet/wn31/res_properties.xml"
+                   Dictionary/getResourceInstance)
+              (= :default resource)
               (Dictionary/getDefaultResourceInstance)
               (string? resource)
               (Dictionary/getResourceInstance resource)

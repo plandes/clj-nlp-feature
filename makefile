@@ -3,7 +3,7 @@
 # location of the http://github.com/plandes/clj-zenbuild cloned directory
 ZBHOME ?=	../clj-zenbuild
 
-all:		jar
+all:		info
 
 include $(ZBHOME)/src/mk/compile.mk
 
