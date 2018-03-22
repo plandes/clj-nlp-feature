@@ -10,14 +10,30 @@ functions.  For additiona feature libraries and examples of how to use this
 library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
 
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+## Table of Contents
+
+- [Obtaining](#obtaining)
+- [Documentation](#documentation)
+- [Usage](#usage)
+- [Citation](#citation)
+- [Building](#building)
+- [Changelog](#changelog)
+- [Citation](#citation-1)
+- [References](#references)
+- [License](#license)
+
+<!-- markdown-toc end -->
+
+
 ## Obtaining
 
 In your `project.clj` file, add:
 
 [![Clojars Project](https://clojars.org/com.zensols.nlp/feature/latest-version.svg)](https://clojars.org/com.zensols.nlp/feature/)
 
-
 ## Documentation
+
 
 API documentation:
 * [Java](https://plandes.github.io/clj-nlp-feature/apidocs/index.html)
@@ -119,9 +135,38 @@ mkdir ../clj-zenbuild && wget -O - https://api.github.com/repos/plandes/clj-zenb
 An extensive changelog is available [here](CHANGELOG.md).
 
 
+## Citation
+
+If you use this software in your research, please cite with the following
+BibTeX:
+
+```bibtex
+@misc{plandes-clj-nlp-feature,
+  author = {Paul Landes},
+  title = {Natural Language Feature Creation},
+  year = {2018},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/plandes/clj-nlp-feature}}
+}
+```
+
+
+## References
+
+```bibtex
+@Book{,
+  title = {WordNet: An Electronic Lexical Database},
+  author = {Christiane Fellbaum},
+  year = {1998},
+  publisher = {Bradford Books},
+}
+```
+
+
 ## License
 
-Copyright © 2016, 2017 Paul Landes
+Copyright © 2016, 2017, 2018 Paul Landes
 
 Apache License version 2.0
 

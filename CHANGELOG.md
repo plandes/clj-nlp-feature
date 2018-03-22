@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.10] - 2018-03-22
+### Changed
+- Updated map backed dictionary to (non)-snapshot version.
+
+
 ## [0.0.9] - 2017-11-02
 ### Added
 - In memory implementation of dictionary (MapBackedDictionary implementation).
@@ -60,7 +65,8 @@ First major release.
 - Unicode features
 
 
-[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.9...HEAD
+[Unreleased]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/plandes/clj-nlp-feature/compare/v0.0.6...v0.0.7
