@@ -41,13 +41,12 @@
              :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
                                        [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}
              :appassem {:aot :all}
-             :dev {:dependencies [[net.sf.extjwnl/extjwnl "1.9.3"
+             :dev {:dependencies [[net.sf.extjwnl/extjwnl "1.9.4"
                                    :classifier "sources"
                                    :exclusions [org.slf4j/slf4j-api]]]}
              :test
              {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
-                             [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]
-                             [net.sf.extjwnl/extjwnl-data-wn31 "1.2"]]
+                             [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]
               :exclusions [org.slf4j/slf4j-log4j12]
               :jvm-opts ["-Dlog4j.configurationFile=test-resources/test-log4j2.xml"
                          "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]}})
