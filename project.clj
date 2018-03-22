@@ -35,8 +35,8 @@
                  [net.mikera/core.matrix.stats "0.7.0"]
 
                  ;; dictionary features
-                 [net.sf.extjwnl/extjwnl "1.9.4-SNAPSHOT"]
-                 [net.sf.extjwnl/extjwnl-data-wn31-map "1.0-SNAPSHOT"]]
+                 [net.sf.extjwnl/extjwnl "1.9.4"]
+                 [net.sf.extjwnl/extjwnl-data-wn31-map "1.0"]]
   :profiles {:snapshot {:git-version {:version-cmd "echo -snapshot"}}
              :provided {:dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
                                        [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]]}

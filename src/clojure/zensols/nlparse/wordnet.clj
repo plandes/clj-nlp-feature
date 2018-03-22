@@ -2,8 +2,17 @@
       :author "Paul Landes"}
     zensols.nlparse.wordnet
   (:import [net.sf.extjwnl.dictionary Dictionary]
-           [net.sf.extjwnl.data POS])
+           [net.sf.extjwnl.data.relationship RelationshipFinder]
+           [net.sf.extjwnl.data POS PointerType])
   (:require [clojure.string :as str]))
+
+;; ;RelationshipList list = RelationshipFinder.findRelationships(start.getSenses().get(0), end.getSenses().get(0), PointerType.SIMILAR_TO
+;; (with-dictionary dict
+;;   (let [w1 (first (lookup-word "dog"))
+;;         w2 (first (lookup-word "canine"))]
+;;     (RelationshipFinder/findRelationships
+;;      (first (.getSenses w1))
+;;      (first (.getSenses w2)) PointerType/SIMILAR_TO)))
 
 (def ^:private word-pattern (re-pattern "^\\w+$"))
 
@@ -118,6 +127,17 @@
      []
      (with-dictionary dict
        [(.lookupIndexWord dict pos-tag lemma)]))))
+
+(defn synonyms
+  "Get all synonyms for a lemma and return as word objects.
+  This uses [[lookup-word]] to get the words, then returns synset words.
+
+  See [[lookup-word]] for **args** documentation."
+  [& args]
+  (with-dictionary dict
+    (->> (apply lookup-word args)
+         (mapcat #(.getSenses %))
+         (mapcat #(.getWords %)))))
 
 (defn verb-frame-flags
   "If **synset** is a verb type synset return its verb frame flags.  Otherwise
