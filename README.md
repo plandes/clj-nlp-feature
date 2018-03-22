@@ -155,7 +155,7 @@ BibTeX:
 ## References
 
 ```TeX
-@Book{,
+@Book{wordnet1998,
   title = {WordNet: An Electronic Lexical Database},
   author = {Christiane Fellbaum},
   year = {1998},
