@@ -140,7 +140,7 @@ An extensive changelog is available [here](CHANGELOG.md).
 If you use this software in your research, please cite with the following
 BibTeX:
 
-```bibtex
+```latex
 @misc{plandes-clj-nlp-feature,
   author = {Paul Landes},
   title = {Natural Language Feature Creation},
@@ -154,7 +154,7 @@ BibTeX:
 
 ## References
 
-```bibtex
+```latex
 @Book{,
   title = {WordNet: An Electronic Lexical Database},
   author = {Christiane Fellbaum},
