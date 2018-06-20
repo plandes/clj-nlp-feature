@@ -11,12 +11,13 @@ library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
 
 Features (creation):
 * [WordNet]
+  * [Dictionary features](https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.word.html#var-dictionary-features)
 * [Token statistics]:
-  * average character length
-  * mention count
-  * sentence count
-  * stopword count
-  * interrogative indication
+  * Average character length
+  * Mention count
+  * Sentence count
+  * Stopword count
+  * Interrogative indication
 * [Character statistics]:
   * Capital tokens
   * Punctuation
