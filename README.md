@@ -9,6 +9,23 @@ This library provides simple character and token based feature creation
 functions.  For additiona feature libraries and examples of how to use this
 library see the [NLP parse library](https://github.com/plandes/clj-nlp-parse).
 
+Features (creation):
+* [WordNet]
+* [Token statistics]:
+  * average character length
+  * mention count
+  * sentence count
+  * stopword count
+  * interrogative indication
+* [Character statistics]:
+  * Capital tokens
+  * Punctuation
+  * Unicode
+  * Repeating characters
+  * Latin vs. Non-latin character sets
+* [Feature utilities]
+  * End/begin of sentence
+  * Ratio functions
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 ## Table of Contents
@@ -36,8 +53,8 @@ In your `project.clj` file, add:
 
 
 API documentation:
-* [Java](https://plandes.github.io/clj-nlp-feature/apidocs/index.html)
 * [Clojure](https://plandes.github.io/clj-nlp-feature/codox/index.html)
+* [Java](https://plandes.github.io/clj-nlp-feature/apidocs/index.html)
 
 
 ## Usage
@@ -104,7 +121,7 @@ value in the map in the atom.
 ## Citation
 
 There are two utilities for looking up words:
-* WordNet: wraps [this library](http://extjwnl.sourceforge.net)
+* [WordNet]: wraps [this library](http://extjwnl.sourceforge.net)
 * Word lists: English word lists taken from [this repo](https://github.com/dwyl/english-words)
 
 Usage of these libraries are available as features with the
@@ -181,3 +198,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+<!-- links -->
+[WordNet]: https://wordnet.princeton.edu
+[Token statistics]: https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.word.html
+[Character statistics]: https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.char.html
+[Feature utilities]: https://plandes.github.io/clj-nlp-feature/codox/zensols.nlparse.feature.util.html
